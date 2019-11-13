@@ -1,0 +1,52 @@
+{
+    "online_stream":
+    [
+        {
+            
+            "id":1,
+            "name":"Paradise Main",
+            "url":"http://icy-5.radioparadise.com/mp3-192",
+            "genre" : ""
+        },
+        {
+            "id":2,
+            "name":"Paradise Rock",
+            "url":"http://icy-5.radioparadise.com/rock-192",
+            "genre" : "Rock"
+        },
+        {
+            "id":3,
+            "name":"Dasko & Mladja",
+            "url":"http://84.16.241.174:8009/stream",
+            "genre" : "Rock"
+        },
+        {
+            "id":4,
+            "name": "Karolina BG",
+            "url": "http://streaming.karolina.rs/karolina.mp3",
+            "genre" : "Rock-Pop"
+        },
+        {
+            "id":5,
+            "name": "Karolina Bez Reklama",
+            "url": "http://streaming.karolina.rs/karolinabezreklama.mp3",
+            "genre" : "Rock-Pop"
+        },
+        {
+            "id":6,
+            "name": "Karolina Novi Sad",
+            "url": "http://streaming.karolina.rs/karolinanovisad.mp3",
+            "genre" : "Rock-Pop"
+        },
+        {
+            "id":7,
+            "name": "Karolina Nis",
+            "url": "http://streaming.karolina.rs/karolinanis.mp3",
+            "genre" : "Rock-Pop"
+        }
+    ],
+    "Offline":
+    [
+
+    ]
+}

@@ -9,6 +9,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
+    <!-- <body onload="refresh_playlist()">        -->
     <body>       
         <div class="jumbotron text-center">
             <h1>Web Player</h1>
@@ -16,43 +17,85 @@
             <p>Friedrich Nietzsche</p> 
         </div>
         <div class="container">
-            <div class="row">
-                <form>
-                    <label for="customRange">Custom range</label>
-                    <input type="range" class="custom-range" id="customRange" name="points1">
-                </form>
-                <i class="fa fa-car"></i>
+            <div class="row justify-content-md-center">
+                <div class="col col-lg-2">
+                    <button type="button" class="btn btn-primary" onclick="play()">Play</button>
+                </div>
+                <div class="col col-lg-2">
+                    <button type="button" class="btn btn-primary" onclick="stop()">Stop</button>
+                </div>
+                <div class="col col-lg-2">
+                    <form>
+                        <input type="range" class="custom-range" id="customRange" name="points1">
+                    </form>
+                </div>
             </div>
             <div class="container">
                 <div class="row" style="border-color: black; border-radius: 5px; border: black;">
-                    <div class="col-md-auto">
-                        <p>Paired devices:</p>
-                        <table class="table table-hover table-dark table-sm" id="paired">
-                            <thead>
-                                <tr>
-                                <th>Name</th>
-                                <th>MAC</th>
-                                <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>                       
-                            </tbody>
-                        </table>
-                    </div>
+                    <p>Playlist:</p>
+                    <table class="table table-hover" style="text-align:center;vertical-align:middle" id="playlist">
+                        <thead>
+                            <tr>
+                            <th>#</th>    
+                            <th>Name</th>
+                            <th>Genre</th>
+                            <th>URL</th>
+                            <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>  
+                            {% for item in playlist %}
+                            <tr class='clickable-row' data-href='/play?id={{item.id}}'>
+                                <td>{{item.id}}</td>
+                                <td>{{item.name}}</td>
+                                <td>{{item.genre}}</td>
+                                <td>{{item.url}}</td>
+                            </tr>
+                            {% endfor %}                  
+                        </tbody>
+                    </table>
                 </div>
-                <button type="button" class="btn btn-primary" onclick="testMe()">Scan</button>
             </div>
-            <button type="button" class="btn btn-primary" onclick="playMusic()">Play</button>
         </div>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script>
-            function playMusic(){
+            $(".clickable-row").click(function() {
+                window.location = $(this).data("href");
+            });
+
+            function stop(){
                 var xmlhttp = new XMLHttpRequest();
-                var url = "/play_music";
-                xmlhttp.open("GET", url, true);
+                var url = "/stop";
+                xmlhttp.open("POST", url, true);
                 xmlhttp.send();               
+            }
+
+            function refresh_playlist(){
+                var xmlhttp = new XMLHttpRequest();
+                var url = "/get_playlist";
+                xmlhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var online_stations = JSON.parse(this.responseText).online_stream;
+                        var table = document.getElementById("playlist");
+                        var i;
+                        for(i = 0; i < online_stations.length; i++) {
+                            var row = table.insertRow(1);
+                            row.setAttribute("class", "clickable-row");
+                            var cell1 = row.insertCell(0);
+                            var cell2 = row.insertCell(1);
+                            var cell3 = row.insertCell(2);
+                            var cell4 = row.insertCell(3);
+                            cell1.innerHTML = online_stations[i].name;
+                            cell2.innerHTML = online_stations[i].genre;
+                            cell3.innerHTML = online_stations[i].url;
+                            cell4.innerHTML = '<button type="button" class="btn btn-primary" onclick="play('+ '"' + online_stations[i].name + '"' +')">Play</button>'
+                        }
+                    }
+                };
+                xmlhttp.open("GET", url, true);
+                xmlhttp.send();
             }
 
             function testMe(){
