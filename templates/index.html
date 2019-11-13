@@ -1,0 +1,86 @@
+<html lang="en">
+    <head>
+        <title>Web Player</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>       
+        <div class="jumbotron text-center">
+            <h1>Web Player</h1>
+            <p><i><b>“And those who were seen dancing were thought to be insane by those who could not hear the music.”</b></i></p>
+            <p>Friedrich Nietzsche</p> 
+        </div>
+        <div class="container">
+            <div class="row">
+                <form>
+                    <label for="customRange">Custom range</label>
+                    <input type="range" class="custom-range" id="customRange" name="points1">
+                </form>
+                <i class="fa fa-car"></i>
+            </div>
+            <div class="container">
+                <div class="row" style="border-color: black; border-radius: 5px; border: black;">
+                    <div class="col-md-auto">
+                        <p>Paired devices:</p>
+                        <table class="table table-hover table-dark table-sm" id="paired">
+                            <thead>
+                                <tr>
+                                <th>Name</th>
+                                <th>MAC</th>
+                                <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>                       
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="testMe()">Scan</button>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="playMusic()">Play</button>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script>
+            function playMusic(){
+                var xmlhttp = new XMLHttpRequest();
+                var url = "/play_music";
+                xmlhttp.open("GET", url, true);
+                xmlhttp.send();               
+            }
+
+            function testMe(){
+                var xmlhttp = new XMLHttpRequest();
+                var url = "/get_paired_devices";
+                xmlhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var myArr = JSON.parse(this.responseText);
+                        myFunction(myArr);
+                    }
+                };
+                xmlhttp.open("GET", url, true);
+                xmlhttp.send();
+            }
+
+                
+            function myFunction(arr) {
+                var table = document.getElementById("paired");
+                var i;
+                for(i = 0; i < arr.length; i++) {
+                    var row = table.insertRow(1);
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+                    cell1.innerHTML = arr[i].name;
+                    cell2.innerHTML = arr[i].mac_address;
+                    cell3.innerHTML = '<button type="button" class="btn btn-outline-info btn-sm">Connect</button>';
+                }
+            }
+        </script>
+    </body>
