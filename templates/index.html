@@ -8,17 +8,30 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Roboto:100' rel='stylesheet' type='text/css'>
+        <!-- fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Finger+Paint|Amatic+SC|Caveat|Cookie|Courgette|Kaushan+Script|Monoton|Pacifico|Sacramento|Satisfy|Shadows+Into+Light|Yeon+Sung&display=swap" rel="stylesheet">
     </head>
-    <!-- <body onload="refresh_playlist()">        -->
-    <body>       
+    <body onload="refresh_page_items()">       
         <div class="jumbotron text-center">
-            <h1>Web Player</h1>
-            <p><i><b>“And those who were seen dancing were thought to be insane by those who could not hear the music.”</b></i></p>
-            <p>Friedrich Nietzsche</p> 
+            <h1 style="font-family: 'Monoton'; font-size: 70px;"><b>Radio stream</b></h1>
+            <hr>
+            <h3 style="font-family: 'Shadows Into Light'">“And those who were seen dancing were thought to be insane by those who could not hear the music.”</h3>
+            <h5 style="font-family: 'Shadows Into Light'"><i>Friedrich Nietzsche</i></h5>  
         </div>
-        <div class="container">
+        <div class="container" style="background-color:azure; border-radius: 10px; border-color: black; border-style: dotted;">
             <div class="row justify-content-md-center">
-                <div class="col col-lg-2">
+                <h2 id="time_and_date" style="font-family: 'Finger Paint'; font-size: 40;"></h2>
+            </div>
+            <div class="row justify-content-md-center"> 
+                <h4 style="font-family: 'Kaushan Script'">Now playing:</h4>
+            </div>
+            <div class="row justify-content-md-center"> 
+                <h3 id="radio" style="font-family: 'Courgette'">---</h3>
+            </div>
+            <div class="row justify-content-md-center"> 
+                <h3 id="artist" style="font-family: 'Satisfy'">---</h3>
+                <!-- <div class="col col-lg-2">
                     <button type="button" class="btn btn-primary" onclick="play()">Play</button>
                 </div>
                 <div class="col col-lg-2">
@@ -28,9 +41,11 @@
                     <form>
                         <input type="range" class="custom-range" id="customRange" name="points1">
                     </form>
-                </div>
+                </div> -->
             </div>
-            <div class="container">
+        </div>
+        <div class="container">
+            <div class="col">
                 <div class="row" style="border-color: black; border-radius: 5px; border: black;">
                     <p>Playlist:</p>
                     <table class="table table-hover" style="text-align:center;vertical-align:middle" id="playlist">
@@ -39,7 +54,6 @@
                             <th>#</th>    
                             <th>Name</th>
                             <th>Genre</th>
-                            <th>URL</th>
                             <th></th>
                             </tr>
                         </thead>
@@ -49,7 +63,6 @@
                                 <td>{{item.id}}</td>
                                 <td>{{item.name}}</td>
                                 <td>{{item.genre}}</td>
-                                <td>{{item.url}}</td>
                             </tr>
                             {% endfor %}                  
                         </tbody>
@@ -71,6 +84,63 @@
                 xmlhttp.open("POST", url, true);
                 xmlhttp.send();               
             }
+
+            function refresh_page_items() {
+                get_artist();
+                refresh_time();
+                var t = setTimeout(refresh_page_items, 5000);
+            }
+
+            function refresh_time(){
+                var today = new Date();
+                var h = today.getHours();
+                var m = today.getMinutes();
+                m = checkTime(m);
+                document.getElementById('time_and_date').innerHTML =
+                    h + ":" + m;
+            }
+            function checkTime(i) {
+                if (i < 10) {
+                    i = "0" + i
+                }; // add zero in front of numbers < 10
+                return i;
+            }
+
+            function get_artist()
+            {
+                var xhttp;
+                xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var data_json = JSON.parse(this.responseText);
+                        document.getElementById('radio').innerHTML = data_json['station_name'];
+                        document.getElementById('artist').innerHTML = data_json['current_track'];                 
+                    }
+
+                }
+                xhttp.open("GET", "get_artist", true);
+                xhttp.send();
+            }
+
+            // function startTime() {
+            //     var today = new Date();
+            //     var h = today.getHours();
+            //     var m = today.getMinutes();
+            //     var s = today.getSeconds();
+            //     m = checkTime(m);
+            //     s = checkTime(s);
+            //     document.getElementById('datetime').innerHTML =
+            //         h + ":" + m + ":" + s;
+            //     var t = setTimeout(startTime, 500);
+            // }
+
+            // function checkTime(i) {
+            //     if (i < 10) {
+            //         i = "0" + i
+            //     }; // add zero in front of numbers < 10
+            //     return i;
+            // }
+
 
             function refresh_playlist(){
                 var xmlhttp = new XMLHttpRequest();
