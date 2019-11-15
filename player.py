@@ -18,6 +18,7 @@ class Player:
         self.url = ""
         self.station_name = ""
         self.current_track = ""
+        self.volume = 50
         self.thread = threading.Thread(target=self.worker, args=())
 
     def worker(self):   
@@ -25,6 +26,8 @@ class Player:
             if self.state == 0: #idle
                 if self.media:
                     self.media.parse()
+                    self.media_player.audio_set_volume(self.volume)
+                    self.media_player.play()
                     if self.media.get_meta(0):
                         self.station_name = self.media.get_meta(0)
                     else:
@@ -37,7 +40,7 @@ class Player:
                     print(self.current_track)
                     # for i in range(13):
                     #     print("{} - {}".format(i, self.media.get_meta(i)))
-                time.sleep(3)
+                time.sleep(1)
             elif self.state == 1: #start playing
                 print("Playing stream")
                 self.media=self.instance.media_new(self.url)
@@ -113,6 +116,12 @@ def bluetooth_connect():
 @app.route("/get_artist")
 def get_artist():
     return '{"station_name" : "'+ player.station_name + '", "current_track" : "' + player.current_track + '"}', 200
+
+@app.route("/set_volume", methods=['POST'])
+def set_volume():
+    player.volume = int(request.form['volume']);
+    return {"result" : "success"}, 200
+
 
 if __name__ == "__main__":
     player.thread.start()

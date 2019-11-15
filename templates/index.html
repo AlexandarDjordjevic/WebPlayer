@@ -10,70 +10,209 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href='https://fonts.googleapis.com/css?family=Roboto:100' rel='stylesheet' type='text/css'>
         <!-- fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Finger+Paint|Amatic+SC|Caveat|Cookie|Courgette|Kaushan+Script|Monoton|Pacifico|Sacramento|Satisfy|Shadows+Into+Light|Yeon+Sung&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Finger+Paint|Amatic+SC|Caveat|Cookie|Courgette|Kaushan+Script|Monoton|Pacifico|Sacramento|Satisfy|Shadows+Into+Light|Yeon+Sung&display=swap" rel="stylesheet">
+        <!-- Icons -->
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     </head>
-    <body onload="refresh_page_items()">       
+    <body">
         <div class="jumbotron text-center">
             <h1 style="font-family: 'Monoton'; font-size: 70px;"><b>Radio stream</b></h1>
             <hr>
             <h3 style="font-family: 'Shadows Into Light'">“And those who were seen dancing were thought to be insane by those who could not hear the music.”</h3>
             <h5 style="font-family: 'Shadows Into Light'"><i>Friedrich Nietzsche</i></h5>  
         </div>
-        <div class="container" style="background-color:azure; border-radius: 10px; border-color: black; border-style: dotted;">
-            <div class="row justify-content-md-center">
-                <h2 id="time_and_date" style="font-family: 'Finger Paint'; font-size: 40;"></h2>
-            </div>
-            <div class="row justify-content-md-center"> 
-                <h4 style="font-family: 'Kaushan Script'">Now playing:</h4>
-            </div>
-            <div class="row justify-content-md-center"> 
-                <h3 id="radio" style="font-family: 'Courgette'">---</h3>
-            </div>
-            <div class="row justify-content-md-center"> 
-                <h3 id="artist" style="font-family: 'Satisfy'">---</h3>
-                <!-- <div class="col col-lg-2">
-                    <button type="button" class="btn btn-primary" onclick="play()">Play</button>
-                </div>
-                <div class="col col-lg-2">
-                    <button type="button" class="btn btn-primary" onclick="stop()">Stop</button>
-                </div>
-                <div class="col col-lg-2">
-                    <form>
-                        <input type="range" class="custom-range" id="customRange" name="points1">
-                    </form>
-                </div> -->
-            </div>
-        </div>
-        <div class="container">
-            <div class="col">
-                <div class="row" style="border-color: black; border-radius: 5px; border: black;">
-                    <p>Playlist:</p>
-                    <table class="table table-hover" style="text-align:center;vertical-align:middle" id="playlist">
-                        <thead>
-                            <tr>
-                            <th>#</th>    
-                            <th>Name</th>
-                            <th>Genre</th>
-                            <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>  
-                            {% for item in playlist %}
-                            <tr class='clickable-row' data-href='/play?id={{item.id}}'>
-                                <td>{{item.id}}</td>
-                                <td>{{item.name}}</td>
-                                <td>{{item.genre}}</td>
-                            </tr>
-                            {% endfor %}                  
-                        </tbody>
-                    </table>
+
+        <div class="container" >
+            <div class="row">
+                <div class="col" style="background-color:azure; border-radius: 20px; border-color: black; border-style: dotted;">
+                    <div class="row justify-content-md-center">
+                        <h2 id="time_and_date" style="font-family: 'Finger Paint'; font-size: 40;"></h2>
+                    </div>
+                    <div class="row justify-content-md-center"> 
+                        <h4 style="font-family: 'Kaushan Script'">Now playing:</h4>
+                    </div>
+                    <div class="row justify-content-md-center"> 
+                        <h3 id="radio" style="font-family: 'Courgette'">---</h3>
+                    </div>
+                    <div class="row justify-content-md-center"> 
+                        <h3 id="artist" style="font-family: 'Satisfy'">---</h3>
+                        <!-- <div class="col col-lg-2">
+                            <button type="button" class="btn btn-primary" onclick="play()">Play</button>
+                        </div>
+                        <div class="col col-lg-2">
+                            <button type="button" class="btn btn-primary" onclick="stop()">Stop</button>
+                        </div>
+                        <div class="col col-lg-2">
+                            <form>
+                                <input type="range" class="custom-range" id="customRange" name="points1">
+                            </form>
+                        </div> -->
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="row justify-content-md-center" style="margin-top: 20px;">
+                <div id="eq">
+                    <div class="eqitem"></div>
+                    <div class="eqitem"></div>
+                    <div class="eqitem"></div>
+                    <div class="eqitem"></div>
+                    <div class="eqitem"></div>  
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div>
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div> 
+                    <div class="eqitem"></div>  
+                </div>
+            </div>
+            <div class="row justify-content-md-center" style="margin-top: 20px;">
+                <div class="col-md-auto" >
+                    <div style="border-color: black; border-radius: 15px; border-style: solid;">
+                        <i class="fas fa-backward fa-2x" style="margin: 20px;"></i>
+                        <i class="fas fa-play fa-3x" style="margin: 20px;"></i>
+                        <!-- <i class="fas fa-stop fa-3x" style="margin: 20px;"></i> -->
+                        <i class="fas fa-forward fa-2x" style="margin: 20px;"></i>
+                        <!-- <i class="fas fa-minus fa-2x" style="margin: 20px;" onclick="volumeDown()"></i> -->
+                        <!-- <b style="font-size: 30px;">3</b> -->
+                        <!-- <i class="fas fa-volume-mute fa-2x" style="margin: 20px;"></i> -->
+                        <i class="fas fa-volume-up fa-2x" style="margin: 20px;"></i>
+                        <!-- <i class="fas fa-plus fa-2x" style="margin: 20px;" onclick="volumeUp()"></i> -->
+                        
+                        <input type="range" min="1" max="100" value="50" class="slider" id="volume">
+                        
+                            
+                        <i class="far fa-list-alt fa-2x" style="margin: 20px;" data-toggle="modal" data-target="#playlistModal"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Modal -->
+            <div class="modal fade" id="playlistModal">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                    
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="font-family: 'Josefin Sans';">Playlist</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                            <div class="container">
+                                <div class="col">
+                                    <div class="row" style="border-color: black; border-radius: 5px; border: black;">
+                                        <table class="table table-hover" style="text-align:center;vertical-align:middle; font-family: 'Josefin Sans';" id="playlist">
+                                            <thead>
+                                                <tr>
+                                                <th>#</th>    
+                                                <th>Name</th>
+                                                <th>Genre</th>
+                                                <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>  
+                                                {% for item in playlist %}
+                                                <tr class='clickable-row' data-href='/play?id={{item.id}}'>
+                                                    <td>{{item.id}}</td>
+                                                    <td>{{item.name}}</td>
+                                                    <td>{{item.genre}}</td>
+                                                </tr>
+                                                {% endfor %}                  
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                        <i class="fas fa-plus-square fa-3x" style="margin: 20px;" data-dismiss="modal" data-toggle="modal" data-target="#addToPlaylist"></i>
+                        <i class="fas fa-window-close fa-3x" style="margin: 20px;" data-dismiss="modal"></i>
+                    </div>
+                    
+                    </div>
+                </div>
+            </div>
+            <!-- playlisModal end -->
+            <!-- Add item to playlist Modal -->
+            <div class="modal fade" id="addToPlaylist">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                    
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="font-family: 'Josefin Sans';">Add stream</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    
+                    <!-- Modal body -->
+                    <div class="modal-body" style="font-family: 'Josefin Sans';">
+                        <div class="container">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" class="form-control" id="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="url">URL:</label>
+                                <input type="text" class="form-control" id="url">
+                            </div>
+                            <div class="form-group">
+                                <label for="genre">Genre:</label>
+                                <input type="text" class="form-control" id="genre">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                        <i class="fas fa-check-square fa-3x" style="margin: 20px;" data-dismiss="modal"></i>
+                        <i class="fas fa-window-close fa-3x" style="margin: 20px;" data-dismiss="modal" data-toggle="modal" data-target="#playlistModal"></i>
+                    </div>
+                    
+                    </div>
+                </div>
+            </div>
+            <!-- playlisModal end -->
+        </div>       
+
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script>
+            var eq_timer = setInterval(function(){
+                $('.eqitem').each(function(){
+                    $(this).height(Math.floor(Math.random() * 90) + 10 );
+                });
+            }, 200);
+
+            var artist_timer = setInterval(get_artist, 2000);
+
+            var date_timer = setInterval(refresh_time, 1000);
+
+            var volume = document.getElementById("volume");
+            
+            volume.oninput = function() {
+                set_volume(this.value);
+            }
+
             $(".clickable-row").click(function() {
                 window.location = $(this).data("href");
             });
@@ -85,19 +224,24 @@
                 xmlhttp.send();               
             }
 
-            function refresh_page_items() {
-                get_artist();
-                refresh_time();
-                var t = setTimeout(refresh_page_items, 5000);
+            function set_volume(volume){
+                var xhttp;
+                xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "set_volume", true);
+                xhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+                xhttp.send("volume=" + volume);
             }
+
 
             function refresh_time(){
                 var today = new Date();
                 var h = today.getHours();
                 var m = today.getMinutes();
+                var s = today.getSeconds();
                 m = checkTime(m);
+                s = checkTime(s);
                 document.getElementById('time_and_date').innerHTML =
-                    h + ":" + m;
+                    h + ":" + m + ":" + s;
             }
             function checkTime(i) {
                 if (i < 10) {
@@ -196,4 +340,51 @@
                 }
             }
         </script>
+        <style>
+            #eq{
+                display : flex;
+                height: 100px;
+            }
+            .eqitem{
+                display: inline-block;
+                align-self: flex-end;
+                float: left;
+                height: 0px;
+                width: 10px;
+                background: black;
+                margin-right: 5px;
+                -webkit-transition: height 0.5s ease-out;
+                transition: height 0.5s ease-out;
+            }
+
+            .slider {
+                -webkit-appearance: none;
+                width: 20%;
+                height: 15px;
+                border-radius: 5px;   
+                background: #54565A;
+                outline: none;
+                -webkit-transition: .2s;
+                transition: opacity .2s;
+            }
+
+            .slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%; 
+                opacity: 1;
+                background: #26292D;
+                cursor: pointer;
+            }
+
+            .slider::-moz-range-thumb {
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                background: #54565A;
+                cursor: pointer;
+            }
+        </style>
     </body>
