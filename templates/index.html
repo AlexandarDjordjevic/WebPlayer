@@ -1,6 +1,7 @@
 <html lang="en">
     <head>
         <title>Web Player</title>
+        <link rel="icon" href="../static/images/music.png">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -51,7 +52,7 @@
                 </div>
             </div>
             <div class="row justify-content-md-center" style="margin-top: 20px;">
-                <div id="eq">
+                <div id="audio_visual" status="stop">
                     <div class="eqitem"></div>
                     <div class="eqitem"></div>
                     <div class="eqitem"></div>
@@ -83,19 +84,17 @@
                 <div class="col-md-auto" >
                     <div style="border-color: black; border-radius: 15px; border-style: solid;">
                         <i class="fas fa-backward fa-2x" style="margin: 20px;"></i>
-                        <i class="fas fa-play fa-3x" style="margin: 20px;"></i>
-                        <!-- <i class="fas fa-stop fa-3x" style="margin: 20px;"></i> -->
+                        <i class="fas fa-play fa-3x" style="margin: 20px;" id="play" hidden></i>
+                        <i class="fas fa-stop fa-3x" style="margin: 20px;" id="stop" ></i>
                         <i class="fas fa-forward fa-2x" style="margin: 20px;"></i>
                         <!-- <i class="fas fa-minus fa-2x" style="margin: 20px;" onclick="volumeDown()"></i> -->
                         <!-- <b style="font-size: 30px;">3</b> -->
-                        <!-- <i class="fas fa-volume-mute fa-2x" style="margin: 20px;"></i> -->
-                        <i class="fas fa-volume-up fa-2x" style="margin: 20px;"></i>
+                        <i class="fas fa-volume-mute fa-2x" style="margin: 20px;" id="mute" hidden></i>
+                        <i class="fas fa-volume-up fa-2x" style="margin: 20px;" id="unmute"></i>
                         <!-- <i class="fas fa-plus fa-2x" style="margin: 20px;" onclick="volumeUp()"></i> -->
                         
-                        <input type="range" min="1" max="100" value="50" class="slider" id="volume">
-                        
-                            
-                        <i class="far fa-list-alt fa-2x" style="margin: 20px;" data-toggle="modal" data-target="#playlistModal"></i>
+                        <input type="range" min="1" max="100" step="1" value="50" class="slider" id="volume">                       
+                        <i class="far fa-list-alt fa-2x" style="margin: 20px;" data-toggle="modal" data-target="#playlistModal" onclick="refresh_playlist()"></i>
                     </div>
                 </div>
             </div>
@@ -126,13 +125,16 @@
                                                 </tr>
                                             </thead>
                                             <tbody>  
-                                                {% for item in playlist %}
-                                                <tr class='clickable-row' data-href='/play?id={{item.id}}'>
+                                                <!-- {% for item in playlist %}
+                                                <tr class='clickable-row' data-href='/play?id={{item.id}}'> -->
+                                                <!-- <tr>
                                                     <td>{{item.id}}</td>
                                                     <td>{{item.name}}</td>
                                                     <td>{{item.genre}}</td>
-                                                </tr>
-                                                {% endfor %}                  
+                                                    <td><i class="fa fa-play" onclick="play_url('{{item.url}}')" data-dismiss="modal" data-toggle="modal" data-target="#playlistModal"></i></td>
+                                                    <td><i class="fa fa-edit"  data-dismiss="modal" data-toggle="modal" data-target="#editPlayistItem"></i></td>
+                                                </tr> -->
+                                                <!-- {% endfor %}             -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -144,7 +146,7 @@
                     <div class="modal-footer">
                         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
                         <i class="fas fa-plus-square fa-3x" style="margin: 20px;" data-dismiss="modal" data-toggle="modal" data-target="#addToPlaylist"></i>
-                        <i class="fas fa-window-close fa-3x" style="margin: 20px;" data-dismiss="modal"></i>
+                        <i class="fas fa-window-close fa-3x" style="margin: 20px;" data-dismiss="modal" ></i>
                     </div>
                     
                     </div>
@@ -191,26 +193,126 @@
                 </div>
             </div>
             <!-- playlisModal end -->
+            <!-- Edit item Modal -->
+            <div class="modal fade" id="editPlayistItem">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                    
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="font-family: 'Josefin Sans';">Edit stream</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    
+                    <!-- Modal body -->
+                    <div class="modal-body" style="font-family: 'Josefin Sans';">
+                        <div class="container">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" class="form-control" id="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="url">URL:</label>
+                                <input type="text" class="form-control" id="url">
+                            </div>
+                            <div class="form-group">
+                                <label for="genre">Genre:</label>
+                                <input type="text" class="form-control" id="genre">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                        <i class="fas fa-check-square fa-3x" style="margin: 20px;" data-dismiss="modal"></i>
+                        <i class="fas fa-window-close fa-3x" style="margin: 20px;" data-dismiss="modal" data-toggle="modal" data-target="#playlistModal"></i>
+                    </div>
+                    
+                    </div>
+                </div>
+            </div>
+            <!-- playlisModal end -->
+
+
         </div>       
 
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script>
+
+            $("#mute").on("click", function(){
+                $(this).attr("hidden", true);
+                $("#unmute").attr("hidden", false);
+                var xhttp;
+                xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "set_mute", true);
+                xhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+                xhttp.send(true);
+            });
+
+            $("#unmute").on("click", function(){
+                $(this).attr("hidden", true);
+                $("#mute").attr("hidden", false);
+                var xhttp;
+                xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "set_mute", true);
+                xhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+                xhttp.send(false);
+            });
+
+            $("#play").on("click", function(){
+                $(this).attr("hidden", true);
+                $("#stop").attr("hidden", false);
+                xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "play", true);
+                xhttp.send();
+            });
+            $("#stop").on("click", function(){
+                $(this).attr("hidden", true);
+                $("#play").attr("hidden", false);
+                xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "stop", true);
+                xhttp.send();
+            });
+
+            function play_url(stream_url){
+                var xhttp = new XMLHttpRequest();
+                var url = "/play";
+                xhttp.open("POST", url, true);
+                xhttp.setRequestHeader('content-type', "application/json;charset=UTF-8");
+                xhttp.send(JSON.stringify({ "url" : stream_url }));                  
+            }
+
             var eq_timer = setInterval(function(){
-                $('.eqitem').each(function(){
-                    $(this).height(Math.floor(Math.random() * 90) + 10 );
-                });
+                if ($("#audio_visual").attr("status") == "play"){
+                    $('.eqitem').each(function(){
+                        $(this).height(Math.floor(Math.random() * 90) + 10 );
+                    });
+                }else{
+                    $('.eqitem').each(function(){
+                        $(this).height( 20 );
+                    });
+                }
+                
             }, 200);
 
-            var artist_timer = setInterval(get_artist, 2000);
-
+            var artist_timer = setInterval(current_playing, 2000);
             var date_timer = setInterval(refresh_time, 1000);
-
             var volume = document.getElementById("volume");
+            var mute = document.getElementById("mute") ;
+            var unmute = document.getElementById("unmute") ;
+
+            mute.onclick = function(){
+                set_volume(volume.value, false);
+            }
+
+            unmute.onclick = function(){
+                set_volume(volume.value, true);
+            }
             
             volume.oninput = function() {
-                set_volume(this.value);
+                set_volume(this.value, false);
             }
 
             $(".clickable-row").click(function() {
@@ -224,14 +326,13 @@
                 xmlhttp.send();               
             }
 
-            function set_volume(volume){
+            function set_volume(volume, mute){
                 var xhttp;
                 xhttp = new XMLHttpRequest();
                 xhttp.open("POST", "set_volume", true);
-                xhttp.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-                xhttp.send("volume=" + volume);
+                xhttp.setRequestHeader('content-type', "application/json;charset=UTF-8");
+                xhttp.send(JSON.stringify({ "volume" : volume, "mute" : mute }));
             }
-
 
             function refresh_time(){
                 var today = new Date();
@@ -250,7 +351,7 @@
                 return i;
             }
 
-            function get_artist()
+            function current_playing()
             {
                 var xhttp;
                 xhttp = new XMLHttpRequest();
@@ -258,11 +359,12 @@
                     if (this.readyState == 4 && this.status == 200) {
                         var data_json = JSON.parse(this.responseText);
                         document.getElementById('radio').innerHTML = data_json['station_name'];
-                        document.getElementById('artist').innerHTML = data_json['current_track'];                 
+                        document.getElementById('artist').innerHTML = data_json['current_track']; 
+                        document.getElementById('audio_visual').setAttribute("status", data_json['status'])                
                     }
 
                 }
-                xhttp.open("GET", "get_artist", true);
+                xhttp.open("GET", "current_playing", true);
                 xhttp.send();
             }
 
@@ -291,20 +393,20 @@
                 var url = "/get_playlist";
                 xmlhttp.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
-                        var online_stations = JSON.parse(this.responseText).online_stream;
+                        var streams = JSON.parse(this.responseText);
                         var table = document.getElementById("playlist");
                         var i;
-                        for(i = 0; i < online_stations.length; i++) {
+                        for(i = 0; i < streams.length; i++) {
+                            table.deleteRow(i);
                             var row = table.insertRow(1);
                             row.setAttribute("class", "clickable-row");
                             var cell1 = row.insertCell(0);
                             var cell2 = row.insertCell(1);
                             var cell3 = row.insertCell(2);
                             var cell4 = row.insertCell(3);
-                            cell1.innerHTML = online_stations[i].name;
-                            cell2.innerHTML = online_stations[i].genre;
-                            cell3.innerHTML = online_stations[i].url;
-                            cell4.innerHTML = '<button type="button" class="btn btn-primary" onclick="play('+ '"' + online_stations[i].name + '"' +')">Play</button>'
+                            cell1.innerHTML = streams[i].name;
+                            cell2.innerHTML = streams[i].genre;
+                            cell3.innerHTML = streams[i].url;
                         }
                     }
                 };
@@ -341,7 +443,7 @@
             }
         </script>
         <style>
-            #eq{
+            #audio_visual{
                 display : flex;
                 height: 100px;
             }
