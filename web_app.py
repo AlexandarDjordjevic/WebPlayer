@@ -1,11 +1,11 @@
 #!/bin/python
-
 import time
 from flask import Flask, render_template, request
 import json
 import os
-from player import Player
-from stream import *
+from player import *
+from stream import StreamList
+
 
 app = Flask(__name__)
 #btooth=Bluetoothctl()
@@ -29,6 +29,15 @@ def scan_available_devices():
     # print(available_devices_list)
     # return json.dumps(available_devices_list)
 
+@app.route("/add_stream", methods=['POST'])
+def add_stream():
+    content = request.get_json();
+    if content != None:
+        StreamList.add_stream(content['name'], content['url'], content['genre'])
+        return {"result" : "success"}, 200
+    else:
+        return {"result" : "error"}, 200
+
 @app.route("/play", methods=['POST'])
 def play():
     content = request.get_json();
@@ -37,7 +46,6 @@ def play():
         player.play(content['url'])
     else:
         player.play(player.url)
-
     return {"result" : "success"}, 200
 
 @app.route("/stop", methods=['POST'])
@@ -45,12 +53,10 @@ def stop_music():
     player.stop()
     return {"result" : "success"}, 200
 
-
-
 @app.route("/get_playlist", methods=['GET'])
 def get_playlist():
     print("Get playlist!")
-    return get_stream_list(), 200
+    return StreamList.get_list(), 200
 
 @app.route("/bluetooth_connect")
 def bluetooth_connect():
@@ -71,6 +77,5 @@ def set_volume():
 
 if __name__ == "__main__":
     player.thread.start()
-    player.init_playlist()
     app.run(host="0.0.0.0", port=1234, debug=True)
     

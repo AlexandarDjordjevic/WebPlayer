@@ -22,13 +22,20 @@ class Stream(Base):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
+class StreamList():
+    def get_list():
+        streams = session.query(Stream)
+        stream_list = list()
+        for stream in streams:
+            stream_list.append({ 'name' : stream.name , 'url' : stream.url, 'genre' : stream.genre})
+        return json.dumps(stream_list)
+
+    def add_stream(_name, _url, _genre):
+        new_stream = Stream(name =_name, url= _url, genre = _genre)
+        session.add(new_stream)
+        session.commit()
+
 def create_database_and_tables():
     Base.metadata.create_all(engine)
     session.commit()
 
-def get_stream_list():
-    streams = session.query(Stream)
-    stream_list = list()
-    for stream in streams:
-        stream_list.append({ 'name' : stream.name , 'url' : stream.url, 'genre' : stream.genre})
-    return json.dumps(stream_list)

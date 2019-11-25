@@ -169,15 +169,15 @@
                         <div class="container">
                             <div class="form-group">
                                 <label for="name">Name:</label>
-                                <input type="text" class="form-control" id="name">
+                                <input type="text" class="form-control" id="new_stream_name">
                             </div>
                             <div class="form-group">
                                 <label for="url">URL:</label>
-                                <input type="text" class="form-control" id="url">
+                                <input type="text" class="form-control" placeholder="https://radio.com" id="new_stream_url">
                             </div>
                             <div class="form-group">
                                 <label for="genre">Genre:</label>
-                                <input type="text" class="form-control" id="genre">
+                                <input type="text" class="form-control" id="new_stream_genre">
                             </div>
                         </div>
                     </div>
@@ -185,7 +185,7 @@
                     <!-- Modal footer -->
                     <div class="modal-footer">
                         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-                        <i class="fas fa-check-square fa-3x" style="margin: 20px;" data-dismiss="modal"></i>
+                        <i class="fas fa-check-square fa-3x" style="margin: 20px;" data-dismiss="modal" onclick="add_stream()"></i>
                         <i class="fas fa-window-close fa-3x" style="margin: 20px;" data-dismiss="modal" data-toggle="modal" data-target="#playlistModal"></i>
                     </div>
                     
@@ -275,6 +275,33 @@
                 xhttp.open("POST", "stop", true);
                 xhttp.send();
             });
+
+            function add_stream(){
+                var new_stream_name = document.getElementById('new_stream_name').value;
+                var new_stream_url = document.getElementById('new_stream_url').value;
+                var new_stream_genre = document.getElementById('new_stream_genre').value;
+
+                var xhttp = new XMLHttpRequest();
+                var url = "/add_stream";
+                xhttp.open("POST", url, true);
+                xhttp.setRequestHeader('content-type', "application/json;charset=UTF-8");
+                xhttp.send(JSON.stringify({ "name" : new_stream_name, "url" : new_stream_url, "genre" : new_stream_genre }));
+
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4){
+                        if(this.status == 200) {
+                            document.getElementById('new_stream_name').value = "";
+                            document.getElementById('new_stream_url').value = "";
+                            document.getElementById('new_stream_genre').value = "";
+                            refresh_playlist();
+                            $('#playlistModal').modal('show');        
+                        }else{
+                            $('#addToPlaylist').modal('show');
+                        }
+                    }
+
+                }
+            }
 
             function play_url(stream_url){
                 var xhttp = new XMLHttpRequest();
@@ -395,10 +422,11 @@
                     if (this.readyState == 4 && this.status == 200) {
                         var streams = JSON.parse(this.responseText);
                         var table = document.getElementById("playlist");
+                        var tableBody = table.getElementsByTagName('tbody');
+                        table.innerHTML = "";
                         var i;
                         for(i = 0; i < streams.length; i++) {
-                            table.deleteRow(i);
-                            var row = table.insertRow(1);
+                            var row = table.insertRow(-1);
                             row.setAttribute("class", "clickable-row");
                             var cell1 = row.insertCell(0);
                             var cell2 = row.insertCell(1);
@@ -406,7 +434,7 @@
                             var cell4 = row.insertCell(3);
                             cell1.innerHTML = streams[i].name;
                             cell2.innerHTML = streams[i].genre;
-                            cell3.innerHTML = streams[i].url;
+                            cell3.innerHTML = '<i class="fas fa-play" onclick="play_url(\'' + streams[i].url + '\')"></i>';
                         }
                     }
                 };

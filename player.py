@@ -5,7 +5,6 @@ import os
 import json
 from stream import *
 
-
 class Player:
     def __init__(self):
         self.instance = vlc.Instance()
@@ -25,7 +24,7 @@ class Player:
         while True:
             if self.state == 0: #idle
                 if self.media:
-                    self.media.parse()
+                    # self.media.parse()
                     if self.mute:
                         self.media_player.audio_set_volume(0)
                     else:
@@ -58,11 +57,8 @@ class Player:
 
     def play(self, url):
         self.state = 1
+        print("Play URL: " + url)
         self.url = url
 
     def stop(self):
         self.state = 2
-
-    def init_playlist(self):
-        json_file = open('playlist.json')
-        self.playlist = json.load(json_file)
