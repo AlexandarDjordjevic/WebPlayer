@@ -8,7 +8,7 @@ from stream import *
 class Player:
     def __init__(self):
         self.instance = vlc.Instance()
-        self.media_player = self.instance.media_player_new()
+        self.media_player = 0#self.instance.media_player_new()
         self.media = 0
         self.state = 0
         self.play_status = "stop"
