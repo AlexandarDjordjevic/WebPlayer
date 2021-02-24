@@ -8,7 +8,7 @@ from stream import *
 class Player:
     def __init__(self):
         self.instance = vlc.Instance()
-        self.media_player = 0#self.instance.media_player_new()
+        self.media_player = self.instance.media_player_new()
         self.media = 0
         self.state = 0
         self.play_status = "stop"
@@ -22,9 +22,11 @@ class Player:
 
     def worker(self):   
         while True:
+            # print("State: " + str(self.state))
             if self.state == 0: #idle
                 if self.media:
-                    # self.media.parse()
+                    print('Playing')
+                    #self.media.parse()
                     if self.mute:
                         self.media_player.audio_set_volume(0)
                     else:
@@ -40,9 +42,13 @@ class Player:
                         self.current_track = " " 
                     print(self.station_name)
                     print(self.current_track)
-                time.sleep(1)
+                else:
+                    print("Media error")
+                    print("URL " + self.url)
+                time.sleep(0.5)
 
             elif self.state == 1: #start playing
+                print("Starting playback...")
                 self.media=self.instance.media_new(self.url)
                 self.media.get_mrl()
                 self.media_player.set_media(self.media)

@@ -9,7 +9,7 @@ engine = create_engine('sqlite:///data.db', echo=False)
 Base = declarative_base()
 Session = sessionmaker()
 Session.configure(bind=engine)
-session = Session()
+
 
 class Stream(Base):
     __tablename__ = 'streams'
@@ -23,16 +23,23 @@ class Stream(Base):
 
 
 class StreamList():
-    def get_list():
+    def get_list(self):
+        session = Session()
         streams = session.query(Stream)
         stream_list = list()
         for stream in streams:
             stream_list.append({ 'name' : stream.name , 'url' : stream.url, 'genre' : stream.genre})
         return json.dumps(stream_list)
 
-    def add_stream(_name, _url, _genre):
+    def add_stream(self, _name, _url, _genre):
+        session = Session()
         new_stream = Stream(name =_name, url= _url, genre = _genre)
         session.add(new_stream)
+        session.commit()
+    
+    def remove_stream(self, _url):
+        session = Session()
+        streams = session.query(Stream).filter_by(url=_url).delete()
         session.commit()
 
 def create_database_and_tables():

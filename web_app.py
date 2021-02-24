@@ -33,7 +33,7 @@ def scan_available_devices():
 def add_stream():
     content = request.get_json();
     if content != None:
-        StreamList.add_stream(content['name'], content['url'], content['genre'])
+        StreamList().add_stream(content['name'], content['url'], content['genre'])
         return {"result" : "success"}, 200
     else:
         return {"result" : "error"}, 200
@@ -48,6 +48,12 @@ def play():
         player.play(player.url)
     return {"result" : "success"}, 200
 
+@app.route("/remove", methods=['POST'])
+def remove_item():
+    content = request.get_json();
+    StreamList().remove_stream(content['url'])
+    return {"result" : "success"}, 200
+
 @app.route("/stop", methods=['POST'])
 def stop_music():
     player.stop()
@@ -56,7 +62,7 @@ def stop_music():
 @app.route("/get_playlist", methods=['GET'])
 def get_playlist():
     print("Get playlist!")
-    return StreamList.get_list(), 200
+    return StreamList().get_list(), 200
 
 @app.route("/bluetooth_connect")
 def bluetooth_connect():
@@ -75,7 +81,8 @@ def set_volume():
     player.mute = bool(content['mute']);
     return {"result" : "success"}, 200
 
+
 if __name__ == "__main__":
     player.thread.start()
-    app.run(host="0.0.0.0", port=1234, debug=True)
+    app.run(host="0.0.0.0", port=8080)
     

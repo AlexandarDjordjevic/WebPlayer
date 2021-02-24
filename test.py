@@ -75,8 +75,8 @@ class Player:
 player = Player()
 
 if __name__ == "__main__":
-    player.url = "http://84.16.241.174:8009/stream";
+    player.url = "http://streaming.karolina.rs/karolina.mp3";
     player.thread.start()
-    player.play("http://84.16.241.174:8009/stream")
+    player.play("http://streaming.karolina.rs/karolina.mp3")
     while True:
         time.sleep(1)
