@@ -25,7 +25,6 @@ class Player:
             # print("State: " + str(self.state))
             if self.state == 0: #idle
                 if self.media:
-                    print('Playing')
                     #self.media.parse()
                     if self.mute:
                         self.media_player.audio_set_volume(0)
@@ -40,11 +39,6 @@ class Player:
                         self.current_track = self.media.get_meta(12)
                     else:
                         self.current_track = " " 
-                    print(self.station_name)
-                    print(self.current_track)
-                else:
-                    print("Media error")
-                    print("URL " + self.url)
                 time.sleep(0.5)
 
             elif self.state == 1: #start playing
